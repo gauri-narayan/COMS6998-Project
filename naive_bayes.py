@@ -72,16 +72,6 @@ p_neutral = p_neg/len(train_sentiment)
 
 # computing P(word)
 vocabulary = get_word_probabilities(train_tweets)
-# vocabulary = dict()
-# for tweet in train_tweets:
-#     text = str(tweet).split()
-#     for word in text:
-#         if word in vocabulary:
-#             vocabulary[word] += 1
-#         else:
-#             vocabulary[word] = 1
-# vocabulary_size = sum(vocabulary.values())
-# vocabulary = {k: v/vocabulary_size for k, v in vocabulary.items()}
 
 # computing conditional P(word|label)
 positive = get_sentiment_groups('positive', train_sentiment, train_tweets)
@@ -119,42 +109,3 @@ for file in companies['Company'][:sample_batch]:
         sentiments.append(prediction)
     company['Sentiment'] = sentiments
     company.to_csv('./sentiments/' + file + '_tweet_sentiment.csv')
-
-'''
-for each company csv:
-    sentiments = []
-    read in tweets
-    for each tweet:
-        break down tweet into list of words
-        must calculate P(label|words) = P(label) [P(word|label)/P(word) for each word]
-        we have P(label) already
-        words_label = 0
-        words = 0
-        for each word in tweet:
-            words_label = calculate P(word|label) and multiply across all words
-            words = calculate P(word) and multiply across all words
-        alpha = words_label/words
-        pos_likelihood = p_pos * alpha
-        neg_likelihood = p_neg * alpha
-        neutral_likelihood = p_neutral * alpha
-        prediction = [log(pos_likelihood), log(neg_likelhihood), log(neutral_likelihood)]
-        sentiment.append(prediction)
-    make new dataframe with tweets in one column and sentiments in the other
-    save new dataframe as company_title_sentiment.csv
-'''
-
-
-
-# https://www.dataquest.io/blog/naive-bayes-tutorial/
-'''
-use log probs!!!
-
-P(label): compute probability of sentiment label --> # of pos tweets/total tweets
-P(word|label): compute probability of each word given label --> total occurrence of the word in that label / total words in that particular label
-P(word): probability of each word --> # of instances of particular word/vocab (?) multiplied across all words
-
-for 'prediction', have to compute probability of all labels given tweet,
-i.e. compute tweet|pos, tweet|neg, and tweet|neutral
-greatest probability is label
-if unknown word --> 1/vocabulary_size
-'''
