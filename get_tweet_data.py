@@ -1,5 +1,6 @@
 import snscrape.modules.twitter as sntwitter
 import re
+import time
 import pandas as pd
 import emoji
 import datetime as dt
@@ -27,29 +28,38 @@ def clean_text(text):
 
 # https://github.com/JustAnotherArchivist/snscrape/issues/115
 
-def create_corpus(keyword):
-    start_date = date(2019, 1, 1)
+def create_corpus(company):
+    name = company[0]
+    keyword = company[1]
+    start_date = date(2018, 12, 31)
     next_date = start_date + dt.timedelta(days=1)
     end_date = date(2020, 1, 1)
-    max_tweets = 50
+    max_tweets = 10
     tweet_content = []
     tweet_dates = []
-    filename = keyword + "_tweets.csv"
-    while next_date != end_date:
+    filename = name + "_tweets.csv"
+    while next_date < end_date:
         for i,tweet in enumerate(sntwitter.TwitterSearchScraper(keyword + ' since:' +
                                         start_date.strftime("%Y-%m-%d") + ' until:' +
                                         next_date.strftime("%Y-%m-%d") + ' lang:en').get_items()):
             if i > max_tweets:
                 break
+            print("collecting tweets...")
             # print(clean_text(tweet.content))
             tweet_content.append(clean_text(tweet.content))
             tweet_dates.append(tweet.date)
+            # time.sleep(5)
         start_date = next_date
         next_date = next_date + dt.timedelta(days=1)
+        print("finished a batch!")
     tweet_data = {'Time': tweet_dates, 'Text': tweet_content }
     tweet_df = pd.DataFrame(tweet_data)
-    tweet_df.to_csv("./tweets/" + filename)
+    tweet_df.to_csv("./final_tweets/" + filename)
 
-companies = pd.read_csv('COMS6998-Project/companies-abbreviations.csv')
-for keyword in companies['Company'][23]:
-    create_corpus(keyword)
+if __name__ == "__main__":
+    companies = [('AMZN', 'Amazon'), ('AAPL', 'Apple'), ('MSFT', 'Microsoft'),
+                 ('DIS', 'Disney'), ('GOOG', 'Google'), ('CVS', 'CVS'),
+                 ('GE', 'General Electric'), ('SAN', 'Santander'),
+                 ('GS', 'Goldman Sachs'), ('CICHY', 'China Construction Bank')]
+    for company in companies:
+        create_corpus(company)
