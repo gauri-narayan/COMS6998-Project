@@ -47,7 +47,7 @@ def get_word_probabilities(tweets):
     return probabilities
 
 # training stage
-train = pd.read_csv('tweet-sentiment-extraction/train.csv')
+train = pd.read_csv('./tweet-sentiment-extraction/train.csv')
 train_tweets = []
 for tweet in train['selected_text']:
     train_tweets.append(clean_text(tweet))
@@ -64,7 +64,7 @@ for sentiment in train_sentiment:
         p_neg += 1
     else:
         p_neutral += 1
-# print(p_pos)
+
 # p_labels
 p_pos = p_pos/len(train_sentiment)
 p_neg = p_neg/len(train_sentiment)
@@ -81,11 +81,14 @@ positive_vocab = get_word_probabilities(positive)
 negative_vocab = get_word_probabilities(negative)
 neutral_vocab = get_word_probabilities(neutral)
 
-companies = pd.read_csv('COMS6998-Project/companies-abbreviations.csv')
-sample_batch = 23
-for file in companies['Company'][:sample_batch]:
-    filename = file + '_tweets.csv'
-    company = pd.read_csv('COMS6998-Project/sample_tweets/' + filename)
+companies = [('AMZN', 'Amazon'), ('AAPL', 'Apple'), ('MSFT', 'Microsoft'),
+             ('DIS', 'Disney'), ('GOOG', 'Google'), ('CVS', 'CVS'),
+             ('GE', 'General Electric'), ('SAN', 'Santander'),
+             ('GS', 'Goldman Sachs'), ('CICHY', 'China Construction Bank')]
+for company in companies:
+    abbr = company[0]
+    filename = abbr + '_tweets.csv'
+    company = pd.read_csv('./tweets/' + filename)
     sentiments = []
     for tweet in company['Text']:
         p_words_pos = 0
@@ -108,4 +111,4 @@ for file in companies['Company'][:sample_batch]:
         # print(prediction)
         sentiments.append(prediction)
     company['Sentiment'] = sentiments
-    company.to_csv('./sentiments/' + file + '_tweet_sentiment.csv')
+    company.to_csv('./sentiment/' + abbr + '_sentiment.csv')
