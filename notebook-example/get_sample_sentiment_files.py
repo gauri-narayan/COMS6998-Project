@@ -19,7 +19,7 @@ def get_truncated_files(company, filename):
     company = company[indices == 1]
     del company['Unnamed: 0']
     del company['Unnamed: 0.1']
-    company.to_csv("./notebook_example/sentiment_samples/" + filename)
+    company.to_csv("./sentiment_samples/" + filename)
 
 
 # companies = [('AMZN', 'Amazon'), ('AAPL', 'Apple'), ('MSFT', 'Microsoft'),
