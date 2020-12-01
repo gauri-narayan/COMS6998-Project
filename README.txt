@@ -21,7 +21,8 @@ To run Naive Bayes, run naive_bayes.py
 
 VAR:
 To run VAR:
-Run VAR_model_NB_outputs.py
+Run VAR_model_NB_outputs.py for NB-based VAR results
+Run VAR_model_DPM_outputs.py for DPM-based VAR results
 
 
 Python files:
@@ -29,3 +30,5 @@ demo.py : called by Jupyter notebook report for sample VAR.
 get_word_representation.py : used for tweet cleaning
 get_DPM_input_rep.py : called by cDPM.py
 get_sample_sentiment_files.py : called by get_topic_sentiments.py
+get_tweet_data.py : scraping file to collect tweet data that was later put in tweets folder
+get_stock_data.py : collected stock data in financial folder with this script
